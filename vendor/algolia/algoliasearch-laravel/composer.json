@@ -1,0 +1,37 @@
+{
+    "name": "algolia/algoliasearch-laravel",
+    "description": "Laravel Algolia extension",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "algolia",
+        "search",
+        "api"
+    ],
+    "require": {
+    	"php": ">=5.5.9",
+        "vinkla/algolia": "~2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0",
+        "mockery/mockery": "~0.9",
+        "orchestra/testbench": "3.1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "AlgoliaSearch\\Laravel\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AlgoliaSearch\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

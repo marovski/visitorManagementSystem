@@ -1,0 +1,45 @@
+{
+    "name": "vinkla/algolia",
+    "description": "An Algolia bridge for Laravel",
+    "license": "MIT",
+    "keywords": ["laravel", "algolia", "search", "api"],
+    "authors": [
+        {
+            "name": "Vincent Klaiber",
+            "email": "hello@vinkla.com",
+            "homepage": "https://vinkla.com"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "illuminate/contracts": "5.3.* || 5.4.*",
+        "illuminate/support": "5.3.* || 5.4.*",
+        "graham-campbell/manager": "^2.5",
+        "algolia/algoliasearch-client-php": "^1.13"
+    },
+    "require-dev": {
+        "graham-campbell/testbench": "^3.3",
+        "mockery/mockery": "^0.9.5",
+        "phpunit/phpunit": "^5.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vinkla\\Algolia\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Vinkla\\Tests\\Algolia\\": "tests/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.5-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

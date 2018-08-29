@@ -1,0 +1,68 @@
+ul.square-menu {
+list-style-type: none;
+list-style: none;
+padding: 0;
+font-family: "Helvetica Neue", Arial, sans-serif;
+-webkit-font-smoothing: antialiased;
+width: 380px;
+margin: 40px auto;
+}
+
+ul.square-menu li{
+float: left;
+margin:5px;	
+}
+
+ul.square-menu li a {
+display: block;
+text-decoration: none;
+padding: 80px 60px;
+background: rgb(128, 128, 128);
+color: white;
+font-weight: normal;
+font-size: 150%;
+width: 180px;
+height: 20px;
+text-align: center;
+text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.05);
+-webkit-transition: all 0.1s ease-in;
+-ms-transition: all 0.1s ease-in;
+-moz-transition: all 0.1s ease-in;
+-o-transition: all 0.1s ease-in;
+transition: all 0.1s ease-in;
+}
+
+ul.square-menu li a.slink-xf {
+background: rgb(255, 187, 0);
+}
+ul.square-menu li a.slink-xs {
+background: rgb(124, 187, 0);
+}
+ul.square-menu li a.slink-xt {
+background: rgb(0, 161, 241);
+}
+ul.square-menu li a.slink-xfour {
+background: rgb(246, 83, 20);
+}
+
+ul.square-menu li a:hover {
+background: rgb(48, 48, 48);
+-moz-transform: scale(1.2);
+-webkit-transform: scale(1.2);
+-o-transform: scale(1.2);
+transform: scale(1.2);
+-moz-box-shadow: 0px 0px 0px 5px rgba(0, 0, 0, 0.12);
+-webkit-box-shadow: 0px 0px 0px 5px rgba(0, 0, 0, 0.12);
+box-shadow: 0px 0px 0px 5px rgba(0, 0, 0, 0.12);
+}
+
+
+
+
+
+
+
+
+
+
+
