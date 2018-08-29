@@ -46,10 +46,10 @@ abstract class AbstractDumper implements DataDumperInterface, DumperInterface
     {
         $this->flags = (int) $flags;
         $this->setCharset($charset ?: ini_get('php.output_encoding') ?: ini_get('default_charset') ?: 'UTF-8');
-        $this->decimalPoint = (string) 0.5;
-        $this->decimalPoint = $this->decimalPoint[1];
+        $this->decimalPoint = localeconv();
+        $this->decimalPoint = $this->decimalPoint['decimal_point'];
         $this->setOutput($output ?: static::$defaultOutput);
-        if (!$output && is_string(static::$defaultOutput)) {
+        if (!$output && \is_string(static::$defaultOutput)) {
             static::$defaultOutput = $this->outputStream;
         }
     }
@@ -65,11 +65,11 @@ abstract class AbstractDumper implements DataDumperInterface, DumperInterface
     {
         $prev = null !== $this->outputStream ? $this->outputStream : $this->lineDumper;
 
-        if (is_callable($output)) {
+        if (\is_callable($output)) {
             $this->outputStream = null;
             $this->lineDumper = $output;
         } else {
-            if (is_string($output)) {
+            if (\is_string($output)) {
                 $output = fopen($output, 'wb');
             }
             $this->outputStream = $output;
@@ -101,9 +101,9 @@ abstract class AbstractDumper implements DataDumperInterface, DumperInterface
     /**
      * Sets the indentation pad string.
      *
-     * @param string $pad A string the will be prepended to dumped lines, repeated by nesting level
+     * @param string $pad A string that will be prepended to dumped lines, repeated by nesting level
      *
-     * @return string The indent pad
+     * @return string The previous indent pad
      */
     public function setIndentPad($pad)
     {
@@ -123,6 +123,13 @@ abstract class AbstractDumper implements DataDumperInterface, DumperInterface
      */
     public function dump(Data $data, $output = null)
     {
+        $this->decimalPoint = localeconv();
+        $this->decimalPoint = $this->decimalPoint['decimal_point'];
+
+        if ($locale = $this->flags & (self::DUMP_COMMA_SEPARATOR | self::DUMP_TRAILING_COMMA) ? setlocale(LC_NUMERIC, 0) : null) {
+            setlocale(LC_NUMERIC, 'C');
+        }
+
         if ($returnDump = true === $output) {
             $output = fopen('php://memory', 'r+b');
         }
@@ -143,17 +150,21 @@ abstract class AbstractDumper implements DataDumperInterface, DumperInterface
             if ($output) {
                 $this->setOutput($prevOutput);
             }
+            if ($locale) {
+                setlocale(LC_NUMERIC, $locale);
+            }
         }
     }
 
     /**
      * Dumps the current line.
      *
-     * @param int $depth The recursive depth in the dumped structure for the line being dumped
+     * @param int $depth The recursive depth in the dumped structure for the line being dumped,
+     *                   or -1 to signal the end-of-dump to the line dumper callable
      */
     protected function dumpLine($depth)
     {
-        call_user_func($this->lineDumper, $this->line, $depth, $this->indentPad);
+        \call_user_func($this->lineDumper, $this->line, $depth, $this->indentPad);
         $this->line = '';
     }
 
@@ -184,7 +195,7 @@ abstract class AbstractDumper implements DataDumperInterface, DumperInterface
             return $s;
         }
 
-        if (!function_exists('iconv')) {
+        if (!\function_exists('iconv')) {
             throw new \RuntimeException('Unable to convert a non-UTF-8 string to UTF-8: required function iconv() does not exist. You should install ext-iconv or symfony/polyfill-iconv.');
         }
 

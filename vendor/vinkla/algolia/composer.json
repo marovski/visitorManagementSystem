@@ -12,15 +12,16 @@
     ],
     "require": {
         "php": "^7.0",
-        "illuminate/contracts": "5.3.* || 5.4.*",
-        "illuminate/support": "5.3.* || 5.4.*",
-        "graham-campbell/manager": "^2.5",
-        "algolia/algoliasearch-client-php": "^1.13"
+        "illuminate/contracts": "5.3.* || 5.4.* || 5.5.*",
+        "illuminate/support": "5.3.* || 5.4.* || 5.5.*",
+        "graham-campbell/manager": "^3.0",
+        "algolia/algoliasearch-client-php": "^1.18"
     },
     "require-dev": {
-        "graham-campbell/testbench": "^3.3",
-        "mockery/mockery": "^0.9.5",
-        "phpunit/phpunit": "^5.7"
+        "graham-campbell/analyzer": "^1.1",
+        "graham-campbell/testbench": "^4.0",
+        "mockery/mockery": "dev-master#c90a17247147543081e4d00f46911e422b49e583",
+        "phpunit/phpunit": "^6.3"
     },
     "autoload": {
         "psr-4": {
@@ -37,7 +38,15 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.5-dev"
+            "dev-master": "2.6-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Vinkla\\Algolia\\AlgoliaServiceProvider"
+            ],
+            "aliases": {
+                "Algolia": "Vinkla\\Algolia\\Facades\\Algolia"
+            }
         }
     },
     "minimum-stability": "dev",

@@ -5,6 +5,7 @@ namespace Laravel\Scout\Engines;
 use Laravel\Scout\Builder;
 use AlgoliaSearch\Client as Algolia;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AlgoliaEngine extends Engine
 {
@@ -35,10 +36,20 @@ class AlgoliaEngine extends Engine
      */
     public function update($models)
     {
+        if ($models->isEmpty()) {
+            return;
+        }
+
         $index = $this->algolia->initIndex($models->first()->searchableAs());
 
+        if ($this->usesSoftDelete($models->first()) && config('scout.soft_delete', false)) {
+            $models->each->pushSoftDeleteMetadata();
+        }
+
         $index->addObjects($models->map(function ($model) {
-            $array = $model->toSearchableArray();
+            $array = array_merge(
+                $model->toSearchableArray(), $model->scoutMetadata()
+            );
 
             if (empty($array)) {
                 return;
@@ -158,20 +169,21 @@ class AlgoliaEngine extends Engine
             return Collection::make();
         }
 
-        $keys = collect($results['hits'])
-                        ->pluck('objectID')->values()->all();
+        $builder = in_array(SoftDeletes::class, class_uses_recursive($model))
+                    ? $model->withTrashed() : $model->newQuery();
 
-        $models = $model->whereIn(
-            $model->getQualifiedKeyName(), $keys
+        $models = $builder->whereIn(
+            $model->getQualifiedKeyName(),
+            collect($results['hits'])->pluck('objectID')->values()->all()
         )->get()->keyBy($model->getKeyName());
 
-        return Collection::make($results['hits'])->map(function ($hit) use ($model, $models) {
+        return Collection::make($results['hits'])->map(function ($hit) use ($models) {
             $key = $hit['objectID'];
 
             if (isset($models[$key])) {
                 return $models[$key];
             }
-        })->filter();
+        })->filter()->values();
     }
 
     /**
@@ -183,5 +195,16 @@ class AlgoliaEngine extends Engine
     public function getTotalCount($results)
     {
         return $results['nbHits'];
+    }
+
+    /**
+     * Determine if the given model uses soft deletes.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return bool
+     */
+    protected function usesSoftDelete($model)
+    {
+        return in_array(SoftDeletes::class, class_uses_recursive($model));
     }
 }

@@ -32,7 +32,7 @@ use League\Flysystem\Plugin\PluginNotFoundException;
  * @method array listPaths($directory = '', $recursive = false)
  * @method array getWithMetadata($path, array $metadata)
  * @method string|false getMimetype($path)
- * @method string|false getTimestamp($path)
+ * @method int|false getTimestamp($path)
  * @method string|false getVisibility($path)
  * @method int|false getSize($path);
  * @method bool setVisibility($path, $visibility)
@@ -195,6 +195,7 @@ class MountManager
      *
      * @throws InvalidArgumentException
      * @throws FilesystemNotFoundException
+     * @throws FileExistsException
      *
      * @return bool
      */
@@ -253,6 +254,20 @@ class MountManager
      */
     public function move($from, $to, array $config = [])
     {
+        list($prefixFrom, $pathFrom) = $this->getPrefixAndPath($from);
+        list($prefixTo, $pathTo) = $this->getPrefixAndPath($to);
+
+        if ($prefixFrom === $prefixTo) {
+            $filesystem = $this->getFilesystem($prefixFrom);
+            $renamed = $filesystem->rename($pathFrom, $pathTo);
+
+            if ($renamed && isset($config['visibility'])) {
+                return $filesystem->setVisibility($pathTo, $config['visibility']);
+            }
+
+            return $renamed;
+        }
+
         $copied = $this->copy($from, $to, $config);
 
         if ($copied) {
