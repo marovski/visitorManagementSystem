@@ -13,7 +13,7 @@ class CreateVisitorsTable extends Migration {
 	public function up()
 	{
 		Schema::create('visitors', function(Blueprint $table)
-		{
+		{$table->engine = 'MyISAM';
 			$table->integer('idVisitor', true);
 			$table->string('visitorName', 45);
 			$table->string('visitorEmail', 45);

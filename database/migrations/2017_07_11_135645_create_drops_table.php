@@ -13,9 +13,10 @@ class CreateDropsTable extends Migration {
 	public function up()
 	{
 		Schema::create('drops', function(Blueprint $table)
-		{
+		{	$table->engine = 'MyISAM';
 			$table->integer('idDrop', true);
 			$table->integer('dropIdUser')->index('fk_Deliver_User1_idx');
+			$table->primary(['idDrop','dropIdUser']);
 			$table->string('dropperName', 45);
 			$table->string('dropperCompanyName', 45)->nullable();
 			$table->string('dropReceiver', 45)->nullable();
@@ -26,7 +27,7 @@ class CreateDropsTable extends Migration {
 			$table->string('dropSize', 60)->nullable();
 			$table->softDeletes();
 			$table->timestamps();
-			$table->primary(['idDrop','dropIdUser']);
+			
 		});
 	}
 

@@ -13,7 +13,7 @@ class CreateSecuritiesTable extends Migration {
 	public function up()
 	{
 		Schema::create('securities', function(Blueprint $table)
-		{
+		{$table->engine = 'MyISAM';
 			$table->integer('idSecurity')->primary();
 			$table->boolean('superAdmin')->nullable();
 			$table->boolean('meetingPermission')->nullable();

@@ -13,7 +13,7 @@ class CreateMeetingVisitorTable extends Migration {
 	public function up()
 	{
 		Schema::create('meeting_visitor', function(Blueprint $table)
-		{
+		{$table->engine = 'MyISAM';
 			$table->integer('visitor_idVisitor')->index('fk_Visitor_has_Meeting_Visitor1_idx');
 			$table->integer('meeting_idMeeting')->index('fk_Visitor_has_Meeting_Meeting1_idx');
 			$table->primary(['visitor_idVisitor','meeting_idMeeting']);

@@ -13,7 +13,7 @@ class CreateLostitemsTable extends Migration {
 	public function up()
 	{
 		Schema::create('lostitems', function(Blueprint $table)
-		{
+		{$table->engine = 'MyISAM';
 			$table->integer('idLostFound', true);
 			$table->integer('idUser')->index('fk_user_has_reported_lostFound');
 			$table->integer('itemCategory');

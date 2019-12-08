@@ -14,8 +14,10 @@ class CreateDeliversTable extends Migration {
 	{
 		Schema::create('delivers', function(Blueprint $table)
 		{
+			$table->engine = 'MyISAM';
 			$table->integer('idDeliver', true);
 			$table->integer('deIdUser')->index('fk_Deliver_User2_idx');
+			$table->primary(['idDeliver','deIdUser']);
 			$table->string('deFirmSupplier', 45)->nullable();
 			$table->string('deDriverName', 45)->nullable();
 			$table->integer('deDriverID');
@@ -27,7 +29,8 @@ class CreateDeliversTable extends Migration {
 			$table->string('image', 60)->nullable();
 			$table->softDeletes();
 			$table->timestamps();
-			$table->primary(['idDeliver','deIdUser']);
+			
+			
 		});
 	}
 

@@ -13,10 +13,11 @@ class CreateMeetingsTable extends Migration {
 	public function up()
 	{
 		Schema::create('meetings', function(Blueprint $table)
-		{
+		{$table->engine = 'MyISAM';
 			$table->integer('idMeeting', true);
 			$table->string('meetingName', 45)->nullable()->unique('meetingName_UNIQUE');
 			$table->integer('meetIdHost')->index('fk_Meeting_User1_idx');
+			$table->primary(['idMeeting','meetIdHost']);
 			$table->string('visitReason', 200)->nullable();
 			$table->dateTime('meetStartDate')->nullable();
 			$table->dateTime('meetEndDate')->nullable();
@@ -27,7 +28,7 @@ class CreateMeetingsTable extends Migration {
 			$table->boolean('email')->nullable();
 			$table->softDeletes();
 			$table->timestamps();
-			$table->primary(['idMeeting','meetIdHost']);
+			
 		});
 	}
 

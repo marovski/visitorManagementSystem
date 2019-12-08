@@ -4,7 +4,7 @@
 namespace App\Console\Commands;
  
 use Illuminate\Console\Command;
-use DB;
+use Illuminate\Support\Facades\DB;
  
 class InstallAppliction extends Command
 {

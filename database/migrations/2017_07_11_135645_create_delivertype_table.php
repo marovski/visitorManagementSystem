@@ -13,7 +13,8 @@ class CreateDelivertypeTable extends Migration {
 	public function up()
 	{
 		Schema::create('delivertype', function(Blueprint $table)
-		{
+
+		{	$table->engine = 'MyISAM';
 			$table->integer('idDeliverType', true);
 			$table->integer('deliver_idDeliver')->index('fk_deliver_idDeliver');
 			$table->string('materialDetails', 250)->nullable();

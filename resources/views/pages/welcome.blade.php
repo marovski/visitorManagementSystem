@@ -7,7 +7,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="jumbotron">
-          <img src="http://www.nanium.com/_gi/nanium-logo.svg">
+          <img src="https://amkor.com/wp-content/themes/amkor/dist/images/header-logo.jpg">
             <h4 style="text-align: justify;text-align: center;">Welcome to NANIUM's Guests and Visitors Management System</h4>
           
        
