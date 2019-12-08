@@ -15,7 +15,15 @@ Our application purpose is to controll all the guests and visitors in a company,
 
 ## Install
 
-Download and execute the installer.sh(bash script) 
+Download and execute the command to create the database 
+```
+php artisan mysql:createdb nanium
+
+```
+Execute the command to do the migration
+```
+php artisan migrate
+```
 
 ## License
 
