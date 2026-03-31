@@ -24,9 +24,22 @@ try {
     sleep 2
 done
 
-echo "DB is ready."
+echo "DB is ready. Dropping all tables for clean migration..."
 
-php artisan migrate:reset --force
+# Drop all existing tables (handles partial state from previous crash-loops)
+php -r "
+\$pdo = new PDO('mysql:host=$DB_HOST;port=$DB_PORT;dbname=$DB_DATABASE', '$DB_USERNAME', '$DB_PASSWORD');
+\$pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
+\$tables = \$pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+foreach(\$tables as \$table) {
+    \$pdo->exec('DROP TABLE IF EXISTS \`' . \$table . '\`');
+    echo 'Dropped: ' . \$table . PHP_EOL;
+}
+\$pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
+echo 'Done.' . PHP_EOL;
+"
+
+echo "Running migrations..."
 php artisan migrate --force
 
 exec php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
