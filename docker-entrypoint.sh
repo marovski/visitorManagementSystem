@@ -45,4 +45,10 @@ php artisan migrate --force
 echo "Seeding admin user..."
 php artisan db:seed --force
 
-exec php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+# Configure Apache to listen on the PORT Railway assigns (default 8080)
+PORT=${PORT:-8080}
+echo "Listen $PORT" > /etc/apache2/ports.conf
+sed -i "s|<VirtualHost \*:80>|<VirtualHost *:$PORT>|g" /etc/apache2/sites-available/000-default.conf
+
+echo "Starting Apache on port $PORT..."
+exec apache2-foreground
