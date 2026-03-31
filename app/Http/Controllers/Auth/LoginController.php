@@ -2,9 +2,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Session;
-use Auth;
 use Redirect;
 
 class LoginController extends Controller
@@ -24,22 +26,27 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $this->validate($request, [
-            'email'    => 'required|email',
-            'password' => 'required|min:6',
+            'login'    => 'required|string',
+            'password' => 'required|string',
         ]);
 
-        $credentials = [
-            'email'    => $request->email,
-            'password' => $request->password,
-        ];
+        $login    = $request->input('login');
+        $password = $request->input('password');
 
-        if (Auth::attempt($credentials, $request->has('remember'))) {
+        // Determine whether the user typed an email address or a username
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        // Find the user record
+        $user = User::where($field, $login)->first();
+
+        if ($user && $user->password && Hash::check($password, $user->password)) {
+            Auth::login($user, $request->has('remember'));
             Session::flash('success', 'Login successful!');
             return redirect()->intended('/');
         }
 
-        Session::flash('danger', 'Incorrect email or password.');
-        return redirect()->back()->withInput($request->only('email'));
+        Session::flash('danger', 'Incorrect email/username or password.');
+        return redirect()->back()->withInput($request->only('login'));
     }
 
     public function logout()

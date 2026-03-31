@@ -24,7 +24,16 @@ class User extends Authenticatable
 
 
     protected $primaryKey = 'idUser';
-    protected $table='users';
+    protected $table = 'users';
+
+    /**
+     * The column used to store the password hash.
+     * Required by Illuminate\Auth\SessionGuard when calling Auth::login().
+     */
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
     /**
      * The attributes that are mass assignable.
      *

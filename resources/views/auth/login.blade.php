@@ -14,16 +14,20 @@
                 <div class="panel-heading"><b>Login</b></div>
                 <div class="panel-body">
 
+                    @if (session('danger'))
+                        <div class="alert alert-danger">{{ session('danger') }}</div>
+                    @endif
+
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">Email Address</label>
+                        <div class="form-group{{ $errors->has('login') ? ' has-error' : '' }}">
+                            <label for="login" class="col-md-4 control-label">Email or Username</label>
                             <div class="col-md-7">
-                                <input id="email" type="email" class="form-control" name="email"
-                                    value="{{ old('email') }}" required autofocus>
-                                @if ($errors->has('email'))
-                                    <span class="help-block"><strong>{{ $errors->first('email') }}</strong></span>
+                                <input id="login" type="text" class="form-control" name="login"
+                                    value="{{ old('login') }}" required autofocus>
+                                @if ($errors->has('login'))
+                                    <span class="help-block"><strong>{{ $errors->first('login') }}</strong></span>
                                 @endif
                             </div>
                         </div>
