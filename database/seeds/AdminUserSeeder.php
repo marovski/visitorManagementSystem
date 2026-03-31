@@ -10,6 +10,7 @@ class AdminUserSeeder extends Seeder
     {
         // Create default security role if it doesn't exist
         $securityId = DB::table('securities')->insertGetId([
+            'idSecurity'        => 1,
             'superAdmin'        => 1,
             'meetingPermission' => 1,
         ]);
