@@ -39,6 +39,12 @@ foreach(\$tables as \$table) {
 echo 'Done.' . PHP_EOL;
 "
 
+echo "Clearing application caches..."
+php artisan view:clear
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+
 echo "Running migrations..."
 php artisan migrate --force
 
