@@ -14,12 +14,17 @@ use Mail;
 
 class PagesController extends Controller{
 
-	public function getIndex() {			
+	public function getIndex() {
+		// Guests go straight to the login page — no embedded login form needed
+		if (!Auth::check()) {
+			return redirect()->route('login');
+		}
+
 		$userId = Auth::id();
         $user = User::find($userId);
 
 		$userPhoto = User::all();
-        
+
 		$meetings = Meeting::orderBy('sensibility','desc')->whereDay('meetStartDate','=',date('d'))->paginate(10);
 
 		$hostMeetings = Meeting::orderBy('sensibility','desc')->where('meetIdHost','=', $userId)->paginate(5);
@@ -27,9 +32,7 @@ class PagesController extends Controller{
 		$delivers = Deliver::orderBy('deEntryTime','asc')->whereRaw('DAY(created_at) = ?',[date('d')])->paginate(5);
 
 		$drops = Drop::orderBy('droppedWhen','asc')->whereRaw('DAY(created_at) = ?',[date('d')])->paginate(5);
-		
-		
-	
+
 		return view('pages.welcome', compact('meetings','user','hostMeetings','userPhoto','delivers','drops'));
 	}
 
