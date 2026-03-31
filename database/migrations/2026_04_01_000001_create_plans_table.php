@@ -37,8 +37,8 @@ class CreatePlansTable extends Migration
                 'max_visitors_per_month'  => 200,
                 'features'                => json_encode(['visitor_management', 'meetings', 'email_notifications']),
                 'is_active'               => 1,
-                'created_at'              => now(),
-                'updated_at'              => now(),
+                'created_at'              => \Carbon\Carbon::now(),
+                'updated_at'              => \Carbon\Carbon::now(),
             ],
             [
                 'name'                    => 'Professional',
@@ -51,8 +51,8 @@ class CreatePlansTable extends Migration
                 'max_visitors_per_month'  => 1000,
                 'features'                => json_encode(['visitor_management', 'meetings', 'email_notifications', 'deliveries', 'drops', 'lost_found', 'analytics']),
                 'is_active'               => 1,
-                'created_at'              => now(),
-                'updated_at'              => now(),
+                'created_at'              => \Carbon\Carbon::now(),
+                'updated_at'              => \Carbon\Carbon::now(),
             ],
             [
                 'name'                    => 'Enterprise',
@@ -65,8 +65,8 @@ class CreatePlansTable extends Migration
                 'max_visitors_per_month'  => 0,
                 'features'                => json_encode(['visitor_management', 'meetings', 'email_notifications', 'deliveries', 'drops', 'lost_found', 'analytics', 'api_access', 'priority_support']),
                 'is_active'               => 1,
-                'created_at'              => now(),
-                'updated_at'              => now(),
+                'created_at'              => \Carbon\Carbon::now(),
+                'updated_at'              => \Carbon\Carbon::now(),
             ],
         ]);
     }
