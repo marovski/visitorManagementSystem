@@ -26,6 +26,7 @@ done
 
 echo "DB is ready."
 
-php artisan migrate:fresh --force
+php artisan migrate:reset --force
+php artisan migrate --force
 
 exec php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
