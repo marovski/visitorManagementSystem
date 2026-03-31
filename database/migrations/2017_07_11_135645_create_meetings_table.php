@@ -17,7 +17,6 @@ class CreateMeetingsTable extends Migration {
 			$table->integer('idMeeting', true);
 			$table->string('meetingName', 45)->nullable()->unique('meetingName_UNIQUE');
 			$table->integer('meetIdHost')->index('fk_Meeting_User1_idx');
-			$table->primary(['idMeeting','meetIdHost']);
 			$table->string('visitReason', 200)->nullable();
 			$table->dateTime('meetStartDate')->nullable();
 			$table->dateTime('meetEndDate')->nullable();

@@ -16,7 +16,6 @@ class CreateUsersTable extends Migration {
 		{$table->engine = 'MyISAM';
 			$table->integer('idUser', true);
 			$table->integer('fk_idSecurity')->index('fk_User_Security1_idx');
-			$table->primary(['idUser','fk_idSecurity']);
 			$table->string('username', 45)->nullable();
 			$table->string('email', 45)->nullable();
 			$table->string('department', 45);

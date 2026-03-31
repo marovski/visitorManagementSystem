@@ -16,7 +16,6 @@ class CreateDropsTable extends Migration {
 		{	$table->engine = 'MyISAM';
 			$table->integer('idDrop', true);
 			$table->integer('dropIdUser')->index('fk_Deliver_User1_idx');
-			$table->primary(['idDrop','dropIdUser']);
 			$table->string('dropperName', 45);
 			$table->string('dropperCompanyName', 45)->nullable();
 			$table->string('dropReceiver', 45)->nullable();
