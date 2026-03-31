@@ -1,3 +1,6 @@
+[variables]
+PHP_VERSION = "7.4"
+
 [phases.setup]
 nixPkgs = [
     "php74",
