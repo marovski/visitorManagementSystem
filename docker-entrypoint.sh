@@ -50,5 +50,12 @@ PORT=${PORT:-8080}
 echo "Listen $PORT" > /etc/apache2/ports.conf
 sed -i "s|<VirtualHost \*:80>|<VirtualHost *:$PORT>|g" /etc/apache2/sites-available/000-default.conf
 
+# Ensure only mpm_prefork is loaded (mod_php is incompatible with event/worker)
+rm -f /etc/apache2/mods-enabled/mpm_event.load \
+       /etc/apache2/mods-enabled/mpm_event.conf \
+       /etc/apache2/mods-enabled/mpm_worker.load \
+       /etc/apache2/mods-enabled/mpm_worker.conf
+[ ! -f /etc/apache2/mods-enabled/mpm_prefork.load ] && a2enmod mpm_prefork
+
 echo "Starting Apache on port $PORT..."
 exec apache2-foreground
