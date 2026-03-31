@@ -20,9 +20,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         gd \
         zip \
         bcmath \
-    && a2enmod rewrite \
-    && a2dismod mpm_event && a2enmod mpm_prefork \
     && rm -rf /var/lib/apt/lists/*
+
+# Configure Apache MPM: mod_php requires prefork; disable event/worker explicitly
+RUN a2enmod rewrite \
+    && a2dismod mpm_event mpm_worker 2>/dev/null || true \
+    && rm -f /etc/apache2/mods-enabled/mpm_event.load \
+             /etc/apache2/mods-enabled/mpm_event.conf \
+             /etc/apache2/mods-enabled/mpm_worker.load \
+             /etc/apache2/mods-enabled/mpm_worker.conf \
+    && a2enmod mpm_prefork
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
