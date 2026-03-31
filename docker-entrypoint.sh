@@ -12,19 +12,20 @@ if [ -n "$MYSQL_URL" ]; then
     echo "DB config parsed from MYSQL_URL: host=$DB_HOST port=$DB_PORT db=$DB_DATABASE"
 fi
 
-# Wait for DB to be reachable
+# Wait for DB using PDO
 until php -r "
-    \$conn = @mysqli_connect('$DB_HOST', '$DB_USERNAME', '$DB_PASSWORD', '$DB_DATABASE', $DB_PORT);
-    if (\$conn) { echo 'ok'; mysqli_close(\$conn); exit(0); }
+try {
+    new PDO('mysql:host=$DB_HOST;port=$DB_PORT;dbname=$DB_DATABASE', '$DB_USERNAME', '$DB_PASSWORD');
+    echo 'ok';
+} catch(Exception \$e) {
     exit(1);
-" 2>/dev/null | grep -q ok; do
+}" 2>/dev/null | grep -q ok; do
     echo "Waiting for DB..."
     sleep 2
 done
 
 echo "DB is ready."
 
-# Fresh migrate: wipe any partial state and rebuild cleanly
 php artisan migrate:fresh --force
 
 exec php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
