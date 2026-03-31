@@ -27,15 +27,22 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-COPY . .
+# Copy composer files first for better layer caching
+COPY composer.json composer.lock ./
 
 ENV COMPOSER_MEMORY_LIMIT=-1
 
-RUN composer install --no-dev --no-scripts --no-autoloader --no-interaction --ignore-platform-reqs \
-    && composer dump-autoload --no-scripts --optimize --ignore-platform-reqs
+RUN composer install --no-dev --no-scripts --no-autoloader --no-interaction --ignore-platform-reqs
 
-RUN chmod -R 775 storage bootstrap/cache
+# Copy rest of application (bust cache on every deploy)
+COPY . .
+
+RUN composer dump-autoload --no-scripts --optimize --ignore-platform-reqs
+
+# Clear any stale bootstrap cache
+RUN php -r "foreach(glob('bootstrap/cache/*.php') as \$f) unlink(\$f);" && \
+    chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8080
 
-CMD php artisan optimize && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+CMD php artisan cache:clear && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
