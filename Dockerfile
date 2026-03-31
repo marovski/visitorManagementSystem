@@ -45,4 +45,7 @@ RUN php -r "foreach(glob('bootstrap/cache/*.php') as \$f) unlink(\$f);" && \
 
 EXPOSE 8080
 
-CMD until php artisan migrate --force 2>&1; do echo "DB not ready, retrying in 3s..."; sleep 3; done && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+COPY docker-entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+CMD ["/entrypoint.sh"]
