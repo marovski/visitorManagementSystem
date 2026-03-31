@@ -15,12 +15,16 @@ class AdminUserSeeder extends Seeder
             'meetingPermission' => 1,
         ]);
 
+        // Get the Starter plan id (seeded in plans migration)
+        $starterPlanId = DB::table('plans')->where('slug', 'starter')->value('id');
+
         // Create default organization
         $org = Organization::firstOrCreate(
             ['slug' => 'default'],
             [
                 'name'                => 'Default Organization',
                 'email'               => 'cardozo27cv@gmail.com',
+                'plan_id'             => $starterPlanId,
                 'subscription_status' => 'trialing',
                 'trial_ends_at'       => \Carbon\Carbon::now()->addDays(14),
                 'is_active'           => 1,
