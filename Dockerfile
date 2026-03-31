@@ -29,10 +29,13 @@ WORKDIR /app
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
+ENV COMPOSER_MEMORY_LIMIT=-1
+
+RUN composer install --no-dev --no-scripts --no-autoloader --no-interaction --ignore-platform-reqs \
+    && composer dump-autoload --no-scripts --optimize --ignore-platform-reqs
 
 RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8080
 
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+CMD php artisan optimize && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
