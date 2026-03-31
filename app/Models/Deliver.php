@@ -44,8 +44,7 @@ class Deliver extends Model
      * @var array
      */
     public $fillable = [
-    
-        'deFirmSupplier','idDeliver', 'deDriverName','deDriverID',
+        'deFirmSupplier','idDeliver', 'deDriverName','deDriverID','organization_id',
     ];
 
     /*
@@ -67,5 +66,20 @@ class Deliver extends Model
     {
         $this->attributes['exitWeight'] = ($value);
     }
+
+  public function organization()
+  {
+    return $this->belongsTo('App\Models\Organization', 'organization_id');
+  }
+
+  public function toSearchableArray()
+  {
+    return [
+      'idDeliver'       => $this->idDeliver,
+      'deFirmSupplier'  => $this->deFirmSupplier,
+      'deDriverName'    => $this->deDriverName,
+      'organization_id' => $this->organization_id,
+    ];
+  }
 
 }

@@ -11,12 +11,12 @@ use Auth;
 use Mail;
 use Carbon\Carbon;
 use App\Mail\NewMeetingNotification;
-
-
+use App\Http\Controllers\Traits\ScopesToOrganization;
 
 
 class MeetingController extends Controller
 {
+    use ScopesToOrganization;
 
     public function __construct() {
         $this->middleware('auth');
@@ -33,11 +33,13 @@ class MeetingController extends Controller
 
         $userAuth = User::find($userId);
 
-        $meetings = Meeting::orderBy('sensibility', 'desc')->paginate(10);
+        $orgId = $this->currentOrgId();
 
-        $meetingsStaff = Meeting::orderBy('sensibility', 'desc')->where('meetIdHost', '=', Auth::user()->idUser)->paginate(10);
+        $meetings = Meeting::where('organization_id', $orgId)->orderBy('sensibility', 'desc')->paginate(10);
 
-        $user= User::all()->load('meetingHost');
+        $meetingsStaff = Meeting::where('organization_id', $orgId)->orderBy('sensibility', 'desc')->where('meetIdHost', '=', Auth::user()->idUser)->paginate(10);
+
+        $user = User::where('organization_id', $orgId)->get()->load('meetingHost');
 
        
         
@@ -59,7 +61,7 @@ class MeetingController extends Controller
      */
     public function create()
     {
-        $meetings= Meeting::orderBy('meetStartDate', 'asc')->where('meetIdHost','=', Auth::user()->idUser)->paginate(5);
+        $meetings = Meeting::where('organization_id', $this->currentOrgId())->orderBy('meetStartDate', 'asc')->where('meetIdHost', '=', Auth::user()->idUser)->paginate(5);
 
 
 
@@ -96,8 +98,7 @@ class MeetingController extends Controller
         $meeting->meetEndDate=$request->meetEndDate;
         $meeting->meetingName=$request->meetingTopic;
         $meeting->email=$request->sendmail;
-
-        
+        $meeting->organization_id = $this->currentOrgId();
 
       Auth::user()->meetingHost()->save($meeting);
 

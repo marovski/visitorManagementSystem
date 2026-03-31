@@ -11,9 +11,11 @@ use Carbon\Carbon;
 
 
 use App\Models\LostFound;
+use App\Http\Controllers\Traits\ScopesToOrganization;
 
 class LostFoundController extends Controller
 {
+    use ScopesToOrganization;
 
     
     public function __construct() {
@@ -26,7 +28,7 @@ class LostFoundController extends Controller
      */
     public function index()
     {
-        $losts = LostFound::orderBy('idLostFound', 'desc')->paginate(10);
+        $losts = LostFound::where('organization_id', $this->currentOrgId())->orderBy('idLostFound', 'desc')->paginate(10);
         return view('losts.index')->withLosts($losts);
         //
     }
@@ -81,6 +83,7 @@ class LostFoundController extends Controller
   }
        
         
+        $lost->organization_id = $this->currentOrgId();
         //Associate relationship to insert the foreign key of the user that create the new entity.
          Auth::user()->losts()->save($lost);
 

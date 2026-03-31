@@ -23,7 +23,8 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4",
         "milon/barcode": "^5.3",
-        "spatie/laravel-feed": "^1.4"
+        "spatie/laravel-feed": "^1.4",
+        "stripe/stripe-php": "^7.0"
 
 
     },

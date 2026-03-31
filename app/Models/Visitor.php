@@ -25,7 +25,7 @@ class Visitor extends Model
     
         'deleted_at'
     ];
-	public $fillable=['idVisitor','visitorName' , 'visitorCompanyName' , 'visitorEmail'];
+	public $fillable=['idVisitor','visitorName' , 'visitorCompanyName' , 'visitorEmail', 'organization_id'];
 
 	  /*
   |--------------------------------------------------------------------------
@@ -36,5 +36,10 @@ class Visitor extends Model
 	public function meeting()
 	{
 		return $this->belongsToMany('App\Models\Meeting');
+	}
+
+	public function organization()
+	{
+		return $this->belongsTo('App\Models\Organization', 'organization_id');
 	}
 }

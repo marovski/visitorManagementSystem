@@ -10,7 +10,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="">Guests and Visitors</a>
+      <a class="navbar-brand" href="">{{ Auth::check() && Auth::user()->organization ? Auth::user()->organization->name : 'Guests and Visitors' }}</a>
       
     </div>
 

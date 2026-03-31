@@ -14,9 +14,11 @@ use App\Models\Visitor;
 use App\Models\User;
 use App\Models\Drop;
 use App\Models\Deliver;
+use App\Http\Controllers\Traits\ScopesToOrganization;
 
 class SearchController extends Controller
 {
+    use ScopesToOrganization;
 
     /**
      * Display a listing of the resource Meetings.
@@ -25,14 +27,13 @@ class SearchController extends Controller
      */
     public function indexMeeting(Request $request)
     {
-        $user= User::all()->load('meetingHost');
-        $visitor= Visitor::all()->load('meeting');
+        $orgId = $this->currentOrgId();
+        $user = User::where('organization_id', $orgId)->get()->load('meetingHost');
+        $visitor = Visitor::where('organization_id', $orgId)->get()->load('meeting');
 
         if (!$request->q) {
-
             return redirect('/');
         }
-
 
         $meetings = Meeting::search($request->q)->take(3)->get();
 
@@ -114,57 +115,46 @@ class SearchController extends Controller
 
 public function autocomplete(Request $request, $id)
 {
+    $orgId = $this->currentOrgId();
+    $q = $request->input('query');
 
     if ($id=='vn') {
-          $data = Visitor::select("visitorName as name")->where("visitorName","LIKE","%{$request->input('query')}%")->get();
+          $data = Visitor::select("visitorName as name")->where('organization_id',$orgId)->where("visitorName","LIKE","%{$q}%")->get();
         return response()->json($data);}
        elseif ($id=='vE') {
-      $data = Visitor::select("visitorEmail as name")->where("visitorEmail","LIKE","%{$request->input('query')}%")->get();
-
+      $data = Visitor::select("visitorEmail as name")->where('organization_id',$orgId)->where("visitorEmail","LIKE","%{$q}%")->get();
         return response()->json($data);
         }elseif ($id=='vC') {
-          $data = Visitor::select("visitorCompanyName as name")->where("visitorCompanyName","LIKE","%{$request->input('query')}%")->get();
+          $data = Visitor::select("visitorCompanyName as name")->where('organization_id',$orgId)->where("visitorCompanyName","LIKE","%{$q}%")->get();
             return response()->json($data);
         }elseif ($id=='vP') {
-            $data = Visitor::select("visitorNPhone as name")->where("visitorNPhone","LIKE","%{$request->input('query')}%")->get();
+            $data = Visitor::select("visitorNPhone as name")->where('organization_id',$orgId)->where("visitorNPhone","LIKE","%{$q}%")->get();
             return response()->json($data);
         }elseif ($id=='mT') {
-
-             $data = Meeting::select("meetingName as name")->where("meetingName","LIKE","%{$request->input('query')}%")->get();
-             
+             $data = Meeting::select("meetingName as name")->where('organization_id',$orgId)->where("meetingName","LIKE","%{$q}%")->get();
              return response()->json($data);
-   
     }elseif ($id=='mP') {
-             $data = Meeting::select("visitReason as name")->where("visitReason","LIKE","%{$request->input('query')}%")->get();
-
+             $data = Meeting::select("visitReason as name")->where('organization_id',$orgId)->where("visitReason","LIKE","%{$q}%")->get();
              return response()->json($data);
     }elseif ($id=='driverN') {
-             $data = Deliver::select("deDriverName as name")->where("deDriverName","LIKE","%{$request->input('query')}%")->get();
-
+             $data = Deliver::select("deDriverName as name")->where('organization_id',$orgId)->where("deDriverName","LIKE","%{$q}%")->get();
              return response()->json($data);
     }elseif ($id=='firm') {
-             $data = Deliver::select("deFirmSupplier as name")->where("deFirmSupplier","LIKE","%{$request->input('query')}%")->get();
-
+             $data = Deliver::select("deFirmSupplier as name")->where('organization_id',$orgId)->where("deFirmSupplier","LIKE","%{$q}%")->get();
              return response()->json($data);
     }elseif ($id=='vehiclePlate') {
-             $data = Deliver::select("vehicleRegistry as name")->where("vehicleRegistry","LIKE","%{$request->input('query')}%")->get();
-
+             $data = Deliver::select("vehicleRegistry as name")->where('organization_id',$orgId)->where("vehicleRegistry","LIKE","%{$q}%")->get();
              return response()->json($data);
     }elseif ($id=='dropC') {
-             $data = Drop::select("dropperCompanyName as name")->where("dropperCompanyName","LIKE","%{$request->input('query')}%")->get();
-
+             $data = Drop::select("dropperCompanyName as name")->where('organization_id',$orgId)->where("dropperCompanyName","LIKE","%{$q}%")->get();
              return response()->json($data);
     }elseif ($id=='dropN') {
-             $data = Drop::select("dropperName as name")->where("dropperName","LIKE","%{$request->input('query')}%")->get();
-
+             $data = Drop::select("dropperName as name")->where('organization_id',$orgId)->where("dropperName","LIKE","%{$q}%")->get();
              return response()->json($data);
     }elseif ($id=='dropR') {
-             $data = User::select("username as name")->where("username","LIKE","%{$request->input('query')}%")->get();
-
+             $data = User::select("username as name")->where('organization_id',$orgId)->where("username","LIKE","%{$q}%")->get();
              return response()->json($data);
     }
-
-
 }
        
 

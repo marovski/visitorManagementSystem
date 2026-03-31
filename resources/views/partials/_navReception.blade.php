@@ -3,6 +3,9 @@
 <li><a href="{{ route('drops.index') }}"><span class="glyphicon glyphicon-gift"></span> Drops</a></li>
 <li><a href="{{ route('losts.index') }}"><span class="losticon"></span> Lost/Found</a></li>
 <li class="{{ Request::is('dashboard') ? "active" : "" }}"><a href="{{ route('dashboard') }}">   <span class="glyphicon glyphicon-stats"></span> Charts/Exports</a></li>
+@if(Auth::user()->isOrgAdmin())
+<li class="{{ Request::is('admin*') ? "active" : "" }}"><a href="{{ route('admin.index') }}"><span class="glyphicon glyphicon-cog"></span> Admin Panel</a></li>
+@endif
 
 
 

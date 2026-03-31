@@ -203,6 +203,43 @@ Route::get('auth/login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('auth/login', 'Auth\LoginController@login');
 Route::get('auth/logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 
+// Registration
+Route::get('register',  'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('register', 'Auth\RegisterController@register');
+
+// Password Reset
+Route::get('auth/password/reset',         'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('auth/password/email',        'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('auth/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('auth/password/reset',        'Auth\ResetPasswordController@reset')->name('password.reset.submit');
+
+// Onboarding (auth required, no org.active check yet — org is being set up)
+Route::get('onboarding/plan',    'OnboardingController@showPlanSelection')->name('onboarding.plan')->middleware('auth');
+Route::post('onboarding/plan',   'OnboardingController@selectPlan')->middleware('auth');
+Route::get('onboarding/billing', 'OnboardingController@showBillingSetup')->name('onboarding.billing')->middleware('auth');
+Route::post('onboarding/billing','OnboardingController@processBilling')->middleware('auth');
+Route::get('onboarding/complete','OnboardingController@complete')->name('onboarding.complete')->middleware('auth');
+
+// Stripe Webhook (must be outside CSRF middleware — see VerifyCsrfToken)
+Route::post('stripe/webhook', 'WebhookController@handle');
+
+// Tenant Admin Panel
+Route::group(['middleware' => ['auth', 'org.active', 'org.admin'], 'prefix' => 'admin'], function () {
+    Route::get('/',                'TenantAdminController@index')->name('admin.index');
+    Route::get('/users',           'TenantAdminController@users')->name('admin.users');
+    Route::post('/users',          'TenantAdminController@storeUser')->name('admin.users.store');
+    Route::get('/users/{id}/edit', 'TenantAdminController@editUser')->name('admin.users.edit');
+    Route::put('/users/{id}',      'TenantAdminController@updateUser')->name('admin.users.update');
+    Route::delete('/users/{id}',   'TenantAdminController@destroyUser')->name('admin.users.destroy');
+    Route::get('/settings',        'TenantAdminController@settings')->name('admin.settings');
+    Route::put('/settings',        'TenantAdminController@updateSettings')->name('admin.settings.update');
+    Route::get('/billing',         'BillingController@show')->name('billing.show');
+    Route::post('/billing/subscribe',  'BillingController@subscribe')->name('billing.subscribe');
+    Route::post('/billing/plan',       'BillingController@updatePlan')->name('billing.update-plan');
+    Route::post('/billing/payment',    'BillingController@updatePaymentMethod')->name('billing.payment');
+    Route::post('/billing/cancel',     'BillingController@cancel')->name('billing.cancel');
+});
+
 
 });
 

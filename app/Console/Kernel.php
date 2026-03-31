@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         //
         Commands\mysql::class,
         Commands\InstallAppliction::class,
+        Commands\SaasCreateDefaultOrg::class,
     ];
 
     /**

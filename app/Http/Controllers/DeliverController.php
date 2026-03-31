@@ -13,12 +13,11 @@ use Carbon\Carbon;
 use App\Http\Requests;
 use App\Models\Deliver;
 use App\Models\DeliverType;
-
-
-
+use App\Http\Controllers\Traits\ScopesToOrganization;
 
 class DeliverController extends Controller
 {
+    use ScopesToOrganization;
 
     public function __construct() {
         $this->middleware('auth');
@@ -30,7 +29,7 @@ class DeliverController extends Controller
      */
       public function index()
     {
-        $delivers = Deliver::orderBy('idDeliver', 'desc')->paginate(10);
+        $delivers = Deliver::where('organization_id', $this->currentOrgId())->orderBy('idDeliver', 'desc')->paginate(10);
         return view('delivers.index')->withDelivers($delivers);
     }
 
@@ -85,6 +84,7 @@ class DeliverController extends Controller
      
    
      $deliver->deIdUser=Auth::user()->idUser;
+     $deliver->organization_id=$this->currentOrgId();
 
 
 //Save Photos

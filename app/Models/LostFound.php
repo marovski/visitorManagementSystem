@@ -30,8 +30,7 @@ class LostFound extends Model
      * @var array
      */
     public $fillable = [
-    
-        'itemDescription','idLostFound', 'finderName','receiverName', 'finderPhone','receiverPhone',
+        'itemDescription','idLostFound', 'finderName','receiverName', 'finderPhone','receiverPhone','organization_id',
     ];
 
 
@@ -42,10 +41,22 @@ class LostFound extends Model
 	*/
 
 	public function user(){
-
-
     return $this->belongsTo('App\Models\User');
+	}
 
+	public function organization()
+	{
+		return $this->belongsTo('App\Models\Organization', 'organization_id');
+	}
 
+	public function toSearchableArray()
+	{
+		return [
+			'idLostFound'     => $this->idLostFound,
+			'itemDescription' => $this->itemDescription,
+			'finderName'      => $this->finderName,
+			'receiverName'    => $this->receiverName,
+			'organization_id' => $this->organization_id,
+		];
 	}
 }

@@ -12,9 +12,11 @@ use Carbon\Carbon;
 use Session;
 use Mail;
 use App\Mail\NewMeetingNotification;
+use App\Http\Controllers\Traits\ScopesToOrganization;
 
 class VisitorController extends Controller
 {
+    use ScopesToOrganization;
 
      public function __construct() {
         $this->middleware('auth',['except' => ['selfcheckIn', 'show','selfSign']]);
@@ -86,7 +88,7 @@ class VisitorController extends Controller
     {    
        
 
-        $users= User::where('fk_idSecurity', '!=', 3)->where('idUser', '!=', Auth::user()->idUser)->get();
+        $users= User::where('organization_id', $this->currentOrgId())->where('fk_idSecurity', '!=', 3)->where('idUser', '!=', Auth::user()->idUser)->get();
 
         $meetingRestricted=Meeting::findOrFail($id);
         $meetingDate=date("Y/m/d", strtotime($meetingRestricted->meetEndDate));
@@ -232,8 +234,8 @@ class VisitorController extends Controller
         $visitors->escorted=$request->escorted;
         
         $visitors->visitorCompanyName=$request->visitorCompanyName;
-        
-       
+        $visitors->organization_id=$this->currentOrgId();
+
        if (!($visitors->meeting->contains($meet))) {
             # code...
              $v=$visitors->save();

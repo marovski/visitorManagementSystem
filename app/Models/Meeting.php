@@ -30,7 +30,7 @@ class Meeting extends Model
     ];
 
 
-  public $fillable = ['idMeeting','meetingName','visitReason','meetStatus','room'];
+  public $fillable = ['idMeeting','meetingName','visitReason','meetStatus','room','organization_id'];
 
     /*
   |--------------------------------------------------------------------------
@@ -54,5 +54,20 @@ class Meeting extends Model
      public function visitor()
   {
     return $this->belongsToMany('App\Models\Visitor');
+  }
+
+  public function organization()
+  {
+    return $this->belongsTo('App\Models\Organization', 'organization_id');
+  }
+
+  public function toSearchableArray()
+  {
+    return [
+      'idMeeting'      => $this->idMeeting,
+      'meetingName'    => $this->meetingName,
+      'visitReason'    => $this->visitReason,
+      'organization_id'=> $this->organization_id,
+    ];
   }
 }

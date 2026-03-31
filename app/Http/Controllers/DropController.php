@@ -9,10 +9,11 @@ use Auth;
 use Session;
 
 use Carbon\Carbon;
-
+use App\Http\Controllers\Traits\ScopesToOrganization;
 
 class DropController extends Controller
 {
+    use ScopesToOrganization;
 
     public function __construct() {
         $this->middleware('auth');
@@ -24,7 +25,7 @@ class DropController extends Controller
      */
         public function index()
     {
-        $drops = Drop::orderBy('idDrop', 'desc')->paginate(10);
+        $drops = Drop::where('organization_id', $this->currentOrgId())->orderBy('idDrop', 'desc')->paginate(10);
         return view('drops.index')->withDrops($drops);
     }
 
@@ -69,6 +70,7 @@ class DropController extends Controller
         
         $drop->dropDescr=$request->dropDescription;
         
+         $drop->organization_id = $this->currentOrgId();
          //Associate relationship to insert the foreign key of the user that create the new entity.
          Auth::user()->drops()->save($drop);
 

@@ -8,9 +8,11 @@ use Session;
 
 use App\Models\Deliver;
 use App\Models\DeliverType;
+use App\Http\Controllers\Traits\ScopesToOrganization;
 
 class DelivertypeController extends Controller
 {
+    use ScopesToOrganization;
 
     public function __construct() {
         $this->middleware('auth');
@@ -64,8 +66,7 @@ class DelivertypeController extends Controller
       $type->sensitiveLevel=$request->sensitivity;
 
       $type->materialDetails=$request->cargo;
-
-
+      $type->organization_id = $this->currentOrgId();
 
       $saveDeliverType=$deliver->type()->save($type);
 

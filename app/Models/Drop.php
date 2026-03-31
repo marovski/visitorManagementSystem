@@ -30,8 +30,7 @@ class Drop extends Model
      * @var array
      */
     public $fillable = [
-    
-        'dropperCompanyName','idDrop', 'dropReceiver','dropperName', 'dropDescr','receiverPhone',
+        'dropperCompanyName','idDrop', 'dropReceiver','dropperName', 'dropDescr','receiverPhone','organization_id',
     ];
     /*
   |--------------------------------------------------------------------------
@@ -40,12 +39,22 @@ class Drop extends Model
   */
   public function user()
   {
-
     return $this->belongsTo('App\Models\User');
-  
   }
 
+  public function organization()
+  {
+    return $this->belongsTo('App\Models\Organization', 'organization_id');
+  }
 
-
-
+  public function toSearchableArray()
+  {
+    return [
+      'idDrop'             => $this->idDrop,
+      'dropperName'        => $this->dropperName,
+      'dropperCompanyName' => $this->dropperCompanyName,
+      'dropReceiver'       => $this->dropReceiver,
+      'organization_id'    => $this->organization_id,
+    ];
+  }
 }

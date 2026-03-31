@@ -31,18 +31,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-    
-        'username', 'email', 
+        'username', 'email', 'password', 'organization_id',
+        'fk_idSecurity', 'department', 'photo', 'is_org_admin', 'remember_token',
     ];
 
-    // *
-    //  * The attributes that should be hidden for arrays.
-    //  *
-    //  * @var array
-     
     protected $hidden = [
-     'remember_token',
-     ];
+        'password',
+        'remember_token',
+    ];
 
 
       /*
@@ -137,8 +133,14 @@ class User extends Authenticatable
       return $this->belongsTo('App\Models\Security');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo('App\Models\Organization', 'organization_id');
+    }
 
-   
-  
+    public function isOrgAdmin()
+    {
+        return (bool) $this->is_org_admin;
+    }
 
   }

@@ -1,0 +1,23 @@
+[phases.setup]
+nixPkgs = [
+    "php74",
+    "php74Packages.composer",
+    "php74Extensions.pdo",
+    "php74Extensions.pdo_mysql",
+    "php74Extensions.mbstring",
+    "php74Extensions.tokenizer",
+    "php74Extensions.xml",
+    "php74Extensions.curl",
+    "php74Extensions.gd",
+    "php74Extensions.zip",
+    "php74Extensions.bcmath",
+    "php74Extensions.json"
+]
+
+[phases.install]
+cmds = [
+    "composer install --no-dev --optimize-autoloader --no-interaction"
+]
+
+[start]
+cmd = "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
