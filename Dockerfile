@@ -53,6 +53,9 @@ RUN php -r "foreach(glob('bootstrap/cache/*.php') as \$f) unlink(\$f);" && \
     chmod -R 775 storage bootstrap/cache && \
     chown -R www-data:www-data storage bootstrap/cache
 
+# Suppress the "ServerName" warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 # Point Apache DocumentRoot at Laravel's public folder
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 

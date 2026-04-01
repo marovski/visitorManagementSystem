@@ -44,6 +44,16 @@ echo 'Done.' . PHP_EOL;
 # to override (e.g. MAIL_DRIVER=smtp with full MAIL_HOST/PORT/USERNAME/PASSWORD).
 export MAIL_DRIVER=${MAIL_DRIVER:-log}
 
+# APP_KEY is required for cookie encryption. If not set as a Railway env var,
+# generate a temporary one. NOTE: each restart will generate a new key and
+# invalidate all sessions. Set APP_KEY permanently in Railway env vars:
+#   php artisan key:generate --show   → copy the output to Railway > Variables
+if [ -z "$APP_KEY" ]; then
+    export APP_KEY="base64:$(php -r 'echo base64_encode(random_bytes(32));')"
+    echo "WARNING: APP_KEY not set — generated a temporary key. Sessions will"
+    echo "         reset on every container restart. Set APP_KEY in Railway vars."
+fi
+
 # Enable debug mode so real errors show instead of generic "Whoops" page.
 # Set APP_DEBUG=false in Railway env vars once the app is stable.
 export APP_DEBUG=${APP_DEBUG:-true}
