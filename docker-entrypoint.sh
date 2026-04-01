@@ -44,6 +44,19 @@ echo 'Done.' . PHP_EOL;
 # to override (e.g. MAIL_DRIVER=smtp with full MAIL_HOST/PORT/USERNAME/PASSWORD).
 export MAIL_DRIVER=${MAIL_DRIVER:-log}
 
+# Enable debug mode so real errors show instead of generic "Whoops" page.
+# Set APP_DEBUG=false in Railway env vars once the app is stable.
+export APP_DEBUG=${APP_DEBUG:-true}
+export APP_ENV=${APP_ENV:-production}
+
+# Ensure required storage subdirectories exist and are writable
+mkdir -p storage/framework/sessions \
+         storage/framework/views \
+         storage/framework/cache \
+         storage/logs
+chown -R www-data:www-data storage
+chmod -R 775 storage
+
 echo "Clearing application caches..."
 php artisan view:clear
 php artisan cache:clear

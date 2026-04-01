@@ -30,23 +30,30 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
-        $login    = $request->input('login');
-        $password = $request->input('password');
+        try {
+            $login    = $request->input('login');
+            $password = $request->input('password');
 
-        // Determine whether the user typed an email address or a username
-        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+            // Determine whether the user typed an email address or a username
+            $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        // Find the user record
-        $user = User::where($field, $login)->first();
+            // Find the user record
+            $user = User::where($field, $login)->first();
 
-        if ($user && $user->password && Hash::check($password, $user->password)) {
-            Auth::login($user, $request->has('remember'));
-            Session::flash('success', 'Login successful!');
-            return redirect()->intended('/');
+            if ($user && $user->password && Hash::check($password, $user->password)) {
+                Auth::login($user, $request->has('remember'));
+                Session::flash('success', 'Login successful!');
+                return redirect()->intended('/dashboard');
+            }
+
+            Session::flash('danger', 'Incorrect email/username or password.');
+            return redirect()->back()->withInput($request->only('login'));
+
+        } catch (\Exception $e) {
+            \Log::error('Login error: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+            Session::flash('danger', 'Login failed: ' . $e->getMessage());
+            return redirect()->back()->withInput($request->only('login'));
         }
-
-        Session::flash('danger', 'Incorrect email/username or password.');
-        return redirect()->back()->withInput($request->only('login'));
     }
 
     public function logout()
