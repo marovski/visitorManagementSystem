@@ -4,10 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Scout\Searchable;
 class Drop extends Model
-{  
-  use Searchable;
+{
   use SoftDeletes;
   /*
 	|--------------------------------------------------------------------------
@@ -47,14 +45,5 @@ class Drop extends Model
     return $this->belongsTo('App\Models\Organization', 'organization_id');
   }
 
-  public function toSearchableArray()
-  {
-    return [
-      'idDrop'             => $this->idDrop,
-      'dropperName'        => $this->dropperName,
-      'dropperCompanyName' => $this->dropperCompanyName,
-      'dropReceiver'       => $this->dropReceiver,
-      'organization_id'    => $this->organization_id,
-    ];
-  }
 }
+

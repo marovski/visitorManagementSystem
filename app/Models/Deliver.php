@@ -5,11 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
-use Laravel\Scout\Searchable;
 class Deliver extends Model
 {
-  
-    use Searchable;
+
     use SoftDeletes;
 
   /*
@@ -72,14 +70,5 @@ class Deliver extends Model
     return $this->belongsTo('App\Models\Organization', 'organization_id');
   }
 
-  public function toSearchableArray()
-  {
-    return [
-      'idDeliver'       => $this->idDeliver,
-      'deFirmSupplier'  => $this->deFirmSupplier,
-      'deDriverName'    => $this->deDriverName,
-      'organization_id' => $this->organization_id,
-    ];
-  }
-
 }
+

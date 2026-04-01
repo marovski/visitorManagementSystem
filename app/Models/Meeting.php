@@ -5,13 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
-use Laravel\Scout\Searchable;
-
-
 class Meeting extends Model
 {
 
-  use Searchable;
   use SoftDeletes;
   /*
   |--------------------------------------------------------------------------
@@ -61,13 +57,5 @@ class Meeting extends Model
     return $this->belongsTo('App\Models\Organization', 'organization_id');
   }
 
-  public function toSearchableArray()
-  {
-    return [
-      'idMeeting'      => $this->idMeeting,
-      'meetingName'    => $this->meetingName,
-      'visitReason'    => $this->visitReason,
-      'organization_id'=> $this->organization_id,
-    ];
-  }
 }
+

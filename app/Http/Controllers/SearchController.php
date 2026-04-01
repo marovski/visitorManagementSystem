@@ -35,29 +35,37 @@ class SearchController extends Controller
             return redirect('/');
         }
 
-        $meetings = Meeting::search($request->q)->take(3)->get();
+        $q = $request->q;
+        $meetings = Meeting::where('organization_id', $orgId)
+            ->where(function ($query) use ($q) {
+                $query->where('meetingName', 'LIKE', "%{$q}%")
+                      ->orWhere('visitReason', 'LIKE', "%{$q}%");
+            })->take(3)->get();
 
         return view('search.indexMeeting', compact('meetings','user','visitor'));
     }
 
 
-/**
+    /**
      * Display a listing of the resource Deliver.
      *
      * @return \Illuminate\Http\Response
      */
-     public function indexDeliver(Request $request)
+    public function indexDeliver(Request $request)
     {
-   
-        $type= Deliver::all()->load('type');
+        $type = Deliver::all()->load('type');
 
         if (!$request->q) {
-
             return redirect('/');
         }
 
-
-        $delivers = Deliver::search($request->q)->take(3)->get();
+        $q = $request->q;
+        $orgId = $this->currentOrgId();
+        $delivers = Deliver::where('organization_id', $orgId)
+            ->where(function ($query) use ($q) {
+                $query->where('deFirmSupplier', 'LIKE', "%{$q}%")
+                      ->orWhere('deDriverName', 'LIKE', "%{$q}%");
+            })->take(3)->get();
 
         return view('search.indexDeliver', compact('delivers','type'));
     }
@@ -69,48 +77,48 @@ class SearchController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-     public function indexDrop(Request $request)
+    public function indexDrop(Request $request)
     {
-  
-
         if (!$request->q) {
-
             return redirect('/');
         }
 
-
-        $drops = Drop::search($request->q)->take(3)->get();
+        $q = $request->q;
+        $orgId = $this->currentOrgId();
+        $drops = Drop::where('organization_id', $orgId)
+            ->where(function ($query) use ($q) {
+                $query->where('dropperName', 'LIKE', "%{$q}%")
+                      ->orWhere('dropperCompanyName', 'LIKE', "%{$q}%")
+                      ->orWhere('dropReceiver', 'LIKE', "%{$q}%");
+            })->take(3)->get();
 
         return view('search.indexDrop', compact('drops'));
     }
 
 
 
-        /**
-     * Display a listing of the resource Drop.
+    /**
+     * Display a listing of the resource LostItem.
      *
      * @return \Illuminate\Http\Response
      */
-
-     public function indexLostItem(Request $request)
+    public function indexLostItem(Request $request)
     {
-  
-
         if (!$request->q) {
-
             return redirect('/');
         }
 
-
-        $lostItems = LostFound::search($request->q)->take(3)->get();
+        $q = $request->q;
+        $orgId = $this->currentOrgId();
+        $lostItems = LostFound::where('organization_id', $orgId)
+            ->where(function ($query) use ($q) {
+                $query->where('itemDescription', 'LIKE', "%{$q}%")
+                      ->orWhere('finderName', 'LIKE', "%{$q}%")
+                      ->orWhere('receiverName', 'LIKE', "%{$q}%");
+            })->take(3)->get();
 
         return view('search.indexLostItem', compact('lostItems'));
     }
-
-
-
-
 
 
 public function autocomplete(Request $request, $id)
@@ -156,10 +164,10 @@ public function autocomplete(Request $request, $id)
              return response()->json($data);
     }
 }
-       
 
 
 
 
-        
+
+
 }

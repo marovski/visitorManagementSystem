@@ -4,12 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Scout\Searchable;
 class LostFound extends Model
 {
 
-
-	use Searchable;
 	use SoftDeletes;
     /*
 	|--------------------------------------------------------------------------
@@ -49,14 +46,5 @@ class LostFound extends Model
 		return $this->belongsTo('App\Models\Organization', 'organization_id');
 	}
 
-	public function toSearchableArray()
-	{
-		return [
-			'idLostFound'     => $this->idLostFound,
-			'itemDescription' => $this->itemDescription,
-			'finderName'      => $this->finderName,
-			'receiverName'    => $this->receiverName,
-			'organization_id' => $this->organization_id,
-		];
-	}
 }
+
