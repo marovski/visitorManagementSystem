@@ -39,6 +39,11 @@ foreach(\$tables as \$table) {
 echo 'Done.' . PHP_EOL;
 "
 
+# Fall back to log driver so password-reset emails don't crash when SMTP
+# env vars haven't been configured yet. Set MAIL_DRIVER in Railway env vars
+# to override (e.g. MAIL_DRIVER=smtp with full MAIL_HOST/PORT/USERNAME/PASSWORD).
+export MAIL_DRIVER=${MAIL_DRIVER:-log}
+
 echo "Clearing application caches..."
 php artisan view:clear
 php artisan cache:clear
