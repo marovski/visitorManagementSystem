@@ -48,10 +48,10 @@ class MeetingController extends Controller
         
 
         if (Auth::user()->role()==true) {
-            return view('meetingsSecurityView.index', compact('meetings', 'user', 'visitor'));
+            return view('meetingsSecurityView.index', compact('meetings', 'user'));
         }
         else
-        return view('meetings.index', compact('meetingsStaff', 'user', 'visitor', 'userAuth'));
+        return view('meetings.index', compact('meetingsStaff', 'user', 'userAuth'));
     }
 
     /**
