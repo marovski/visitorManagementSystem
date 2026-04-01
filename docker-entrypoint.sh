@@ -44,6 +44,12 @@ echo 'Done.' . PHP_EOL;
 # to override (e.g. MAIL_DRIVER=smtp with full MAIL_HOST/PORT/USERNAME/PASSWORD).
 export MAIL_DRIVER=${MAIL_DRIVER:-log}
 
+# Disable Laravel Scout/Algolia indexing unless SCOUT_DRIVER is explicitly set.
+# Without Algolia credentials every model save fires an HTTP request to Algolia
+# and crashes with AlgoliaConnectionException. Set SCOUT_DRIVER=algolia in
+# Railway env vars (along with ALGOLIA_APP_ID and ALGOLIA_SECRET) to re-enable.
+export SCOUT_DRIVER=${SCOUT_DRIVER:-null}
+
 # APP_KEY is required for cookie encryption. If not set as a Railway env var,
 # generate a temporary one. NOTE: each restart will generate a new key and
 # invalidate all sessions. Set APP_KEY permanently in Railway env vars:
