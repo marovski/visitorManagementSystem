@@ -72,32 +72,8 @@ class User extends Authenticatable
 
      public function role()
     {
-      $n=2;
-      $sec = Security::whereHas('users', function ($query) {
-      $query->where('meetingPermission', '=', '2'); 
-
-
-     })->get();
-
-     
-
-        foreach ($sec as $role)
-        {
-
-
-            if ($role->idSecurity == Auth::user()->fk_idSecurity){
-
-
-              return true;
-
-            }
-
-                
-             return false;
-          
-        }
-       
-          
+        $security = Security::find($this->fk_idSecurity);
+        return $security && $security->meetingPermission == '2';
     }
     
     
