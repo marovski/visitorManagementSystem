@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => env('APP_NAME', 'Guests and Visitors'),
+    'name' => env('APP_NAME', 'Gestão de Visitantes - Welcome'),
 
     /*
     |--------------------------------------------------------------------------
@@ -64,7 +64,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'Atlantic/Cape_Verde'),
 
     /*
     |--------------------------------------------------------------------------

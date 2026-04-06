@@ -57,7 +57,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'visitorandguestmanagement@visitorguest.x10.bz'),
-        'name' => env('MAIL_FROM_NAME', 'Nanium Visitor and Guest Management'),
+        'name' => env('MAIL_FROM_NAME', 'Gestão de Visitantes - Welcome'),
     ],
 
     /*

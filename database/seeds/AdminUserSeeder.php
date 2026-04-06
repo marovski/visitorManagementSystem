@@ -22,7 +22,7 @@ class AdminUserSeeder extends Seeder
         $org = Organization::firstOrCreate(
             ['slug' => 'default'],
             [
-                'name'                => 'Default Organization',
+                'name'                => 'Organização Padrão',
                 'email'               => 'cardozo27cv@gmail.com',
                 'plan_id'             => $starterPlanId,
                 'subscription_status' => 'trialing',

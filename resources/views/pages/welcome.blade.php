@@ -8,7 +8,7 @@
         <div class="col-md-12">
           <div class="jumbotron">
           <img src="https://amkor.com/wp-content/themes/amkor/dist/images/header-logo.jpg">
-            <h4 style="text-align: justify;text-align: center;">Welcome to NANIUM's Guests and Visitors Management System</h4>
+            <h4 style="text-align: justify;text-align: center;">Bem-vindo ao {{ config('app.name') }}</h4>
           
        
           </div>

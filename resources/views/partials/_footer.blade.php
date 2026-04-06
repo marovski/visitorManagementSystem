@@ -7,5 +7,5 @@
   padding: 1rem;
 
   text-align: center;
-" class="navbar-fixed-bottom" ><br><p class="text-center">Copyright NANIUM - All rights reserved</p></br></footer>
+" class="navbar-fixed-bottom" ><br><p class="text-center">&copy; {{ date('Y') }} {{ config('app.name') }} - Todos os direitos reservados</p></br></footer>
 

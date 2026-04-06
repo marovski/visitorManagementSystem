@@ -33,8 +33,8 @@ $(function() {
                 <div class="row">
                 <div class="col-md-6" style="width: 400px">
                     <div id="logo">
-                    <img src="/images/nanium.jpg">
-                     <h5 style="">Expires at: {{ date('d-m-Y', strtotime($current = Carbon::now('Europe/Lisbon')))}}</h5>
+                     <strong>{{ config('app.name') }}</strong>
+                     <h5 style="">Expires at: {{ date('d-m-Y', strtotime($current = Carbon::now(config('app.timezone'))))}}</h5>
                     </div>
                     <br>   
                     <div class="row"> 
